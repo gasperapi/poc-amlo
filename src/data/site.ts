@@ -1,4 +1,5 @@
 // Mock content for the ปปง. public template (POC). No backend — all data is static.
+// Images sourced from amlo.go.th and sub-sites (pdss.amlo.go.th, sed.amlo.go.th galleries).
 
 export type NewsCategory = "ข่าวด่วน" | "ประกาศ" | "ผลการดำเนินงาน" | "เตือนภัย";
 
@@ -20,7 +21,7 @@ export const NEWS_ITEMS: readonly NewsItem[] = [
     excerpt:
       "ปปง. อายัดทรัพย์สินเครือข่ายขบวนการหลอกลวงลงทุนออนไลน์ มูลค่ารวมกว่า 850 ล้านบาท พร้อมประสานหน่วยงานที่เกี่ยวข้องเร่งคืนเงินผู้เสียหาย",
     id: "n1",
-    image: "https://img.heroui.chat/image/dashboard?w=800&h=500&u=amlo-news-1",
+    image: "/images/amlo/news/news-1.jpeg",
     isBreaking: true,
     readTime: "อ่าน 3 นาที",
     title: "อายัดทรัพย์เครือข่ายหลอกลงทุนออนไลน์ กว่า 850 ล้านบาท",
@@ -31,7 +32,7 @@ export const NEWS_ITEMS: readonly NewsItem[] = [
     excerpt:
       "แจ้งเตือนประชาชนระวังมิจฉาชีพแอบอ้างเป็นเจ้าหน้าที่ ปปง. โทรศัพท์ข่มขู่ให้โอนเงินเข้าบัญชีเพื่อตรวจสอบ ย้ำ ปปง. ไม่มีนโยบายดังกล่าว",
     id: "n2",
-    image: "https://img.heroui.chat/image/dashboard?w=800&h=500&u=amlo-news-2",
+    image: "/images/amlo/news/news-2.jpeg",
     isBreaking: true,
     readTime: "อ่าน 2 นาที",
     title: "เตือนภัย! มิจฉาชีพแอบอ้างเป็นเจ้าหน้าที่ ปปง. หลอกโอนเงิน",
@@ -42,7 +43,7 @@ export const NEWS_ITEMS: readonly NewsItem[] = [
     excerpt:
       "ประกาศรายชื่อบุคคลที่ถูกกำหนดตามมาตรา 6 แห่งพระราชบัญญัติป้องกันและปราบปรามการสนับสนุนทางการเงินแก่การก่อการร้าย ฉบับล่าสุด",
     id: "n3",
-    image: "https://img.heroui.chat/image/dashboard?w=800&h=500&u=amlo-news-3",
+    image: "/images/amlo/news/news-3.jpeg",
     readTime: "อ่าน 4 นาที",
     title: "ประกาศรายชื่อบุคคลที่ถูกกำหนด ฉบับล่าสุด",
   },
@@ -52,7 +53,7 @@ export const NEWS_ITEMS: readonly NewsItem[] = [
     excerpt:
       "สรุปผลการดำเนินงานไตรมาส 2/2569 ปปง. ดำเนินการยึด อายัดทรัพย์สินรวมกว่า 3,200 ล้านบาท และส่งเรื่องดำเนินคดีกว่า 120 ราย",
     id: "n4",
-    image: "https://img.heroui.chat/image/dashboard?w=800&h=500&u=amlo-news-4",
+    image: "/images/amlo/news/news-4.png",
     readTime: "อ่าน 5 นาที",
     title: "สรุปผลการดำเนินงานไตรมาส 2/2569",
   },
@@ -62,7 +63,7 @@ export const NEWS_ITEMS: readonly NewsItem[] = [
     excerpt:
       "เปิดรับฟังความคิดเห็นร่างกฎกระทรวงว่าด้วยการตรวจสอบเพื่อทราบข้อเท็จจริงเกี่ยวกับลูกค้า (KYC) สำหรับสถาบันการเงิน",
     id: "n5",
-    image: "https://img.heroui.chat/image/dashboard?w=800&h=500&u=amlo-news-5",
+    image: "/images/amlo/news/news-5.png",
     readTime: "อ่าน 3 นาที",
     title: "เปิดรับฟังความคิดเห็นร่างกฎกระทรวงด้าน KYC",
   },
@@ -72,7 +73,7 @@ export const NEWS_ITEMS: readonly NewsItem[] = [
     excerpt:
       "เตือนภัยรูปแบบการฟอกเงินผ่านสินทรัพย์ดิจิทัล พร้อมแนะแนวทางสังเกตธุรกรรมที่ผิดปกติสำหรับประชาชนและผู้ประกอบธุรกิจ",
     id: "n6",
-    image: "https://img.heroui.chat/image/dashboard?w=800&h=500&u=amlo-news-6",
+    image: "/images/amlo/news/news-6.png",
     readTime: "อ่าน 4 นาที",
     title: "รู้ทันรูปแบบการฟอกเงินผ่านสินทรัพย์ดิจิทัล",
   },
@@ -161,7 +162,7 @@ export const SOCIAL_POSTS: readonly SocialPost[] = [
     id: "s1",
     likes: "48.2K",
     platform: "tiktok",
-    thumbnail: "https://img.heroui.chat/image/dashboard?w=500&h=800&u=amlo-tiktok-1",
+    thumbnail: "/images/amlo/social/social-1.png",
     views: "1.8M",
   },
   {
@@ -171,7 +172,7 @@ export const SOCIAL_POSTS: readonly SocialPost[] = [
     id: "s2",
     likes: "9.4K",
     platform: "instagram",
-    thumbnail: "https://img.heroui.chat/image/dashboard?w=600&h=600&u=amlo-ig-1",
+    thumbnail: "/images/amlo/social/social-2.jpeg",
   },
   {
     author: "@amlo.thailand",
@@ -180,7 +181,7 @@ export const SOCIAL_POSTS: readonly SocialPost[] = [
     id: "s3",
     likes: "63.1K",
     platform: "tiktok",
-    thumbnail: "https://img.heroui.chat/image/dashboard?w=500&h=800&u=amlo-tiktok-2",
+    thumbnail: "/images/amlo/social/social-3.jpeg",
     views: "2.4M",
   },
   {
@@ -190,7 +191,7 @@ export const SOCIAL_POSTS: readonly SocialPost[] = [
     id: "s4",
     likes: "12.7K",
     platform: "facebook",
-    thumbnail: "https://img.heroui.chat/image/dashboard?w=700&h=500&u=amlo-fb-1",
+    thumbnail: "/images/amlo/social/social-4.jpeg",
   },
   {
     author: "amlo_thailand",
@@ -199,7 +200,7 @@ export const SOCIAL_POSTS: readonly SocialPost[] = [
     id: "s5",
     likes: "7.8K",
     platform: "instagram",
-    thumbnail: "https://img.heroui.chat/image/dashboard?w=600&h=600&u=amlo-ig-2",
+    thumbnail: "/images/amlo/social/social-5.jpeg",
   },
   {
     author: "@amlo.thailand",
@@ -208,7 +209,7 @@ export const SOCIAL_POSTS: readonly SocialPost[] = [
     id: "s6",
     likes: "91.5K",
     platform: "tiktok",
-    thumbnail: "https://img.heroui.chat/image/dashboard?w=500&h=800&u=amlo-tiktok-3",
+    thumbnail: "/images/amlo/social/social-6.jpeg",
     views: "3.1M",
   },
 ];
