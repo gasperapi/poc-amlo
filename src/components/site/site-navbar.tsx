@@ -2,12 +2,14 @@
 
 import type {AnchorHTMLAttributes} from "react";
 
-import {ScalesBalanced} from "@gravity-ui/icons";
 import {Navbar} from "@heroui-pro/react";
+import Image from "next/image";
 import {usePathname, useRouter} from "next/navigation";
 
+import logo from "../../Anti-Money_Laundering_Office_Logo.png";
 import {SITE_NAV_ITEMS} from "../../site-nav";
 
+import {ThemeColorPicker} from "./theme-color-picker";
 import {ThemeToggle} from "./theme-toggle";
 
 function isActive(pathname: string, href: string) {
@@ -19,9 +21,7 @@ function isActive(pathname: string, href: string) {
 function BrandMark() {
   return (
     <div className="flex items-center gap-2.5">
-      <div className="bg-accent text-accent-foreground flex size-9 items-center justify-center rounded-xl">
-        <ScalesBalanced className="size-5" />
-      </div>
+      <Image alt="ตราสัญลักษณ์ ปปง." className="size-9 object-contain" priority src={logo} />
       <div className="flex flex-col leading-none">
         <span className="text-foreground text-base font-bold tracking-tight">ปปง.</span>
         <span className="text-muted text-[11px] font-medium">ปราบปรามการฟอกเงิน</span>
@@ -60,7 +60,8 @@ export function SiteNavbar() {
 
         <Navbar.Separator className="hidden h-4 md:block" />
 
-        <Navbar.Content>
+        <Navbar.Content className="gap-1">
+          <ThemeColorPicker />
           <ThemeToggle />
         </Navbar.Content>
       </Navbar.Header>

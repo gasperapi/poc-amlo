@@ -1,6 +1,8 @@
-import {Envelope, LogoFacebook, MapPin, ScalesBalanced} from "@gravity-ui/icons";
+import {Envelope, LogoFacebook, MapPin} from "@gravity-ui/icons";
 import {Link} from "@heroui/react";
+import Image from "next/image";
 
+import logo from "../../Anti-Money_Laundering_Office_Logo.png";
 import {SITE_NAV_ITEMS} from "../../site-nav";
 
 export function SiteFooter() {
@@ -9,9 +11,7 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-5 py-10 sm:grid-cols-2 lg:grid-cols-4">
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2.5">
-            <div className="bg-accent text-accent-foreground flex size-9 items-center justify-center rounded-xl">
-              <ScalesBalanced className="size-5" />
-            </div>
+            <Image alt="ตราสัญลักษณ์ ปปง." className="size-9 object-contain" src={logo} />
             <div className="flex flex-col leading-tight">
               <span className="text-foreground text-sm font-bold">ปปง.</span>
               <span className="text-muted text-xs">ปราบปรามการฟอกเงิน</span>

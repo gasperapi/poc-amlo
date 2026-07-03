@@ -11,8 +11,9 @@ export const metadata: Metadata = {
   title: "ปปง. | สำนักงานป้องกันและปราบปรามการฟอกเงิน",
 };
 
-// Applies the persisted theme before first paint to avoid a flash of the wrong color scheme.
-const themeScript = `(function(){try{var t=localStorage.getItem("theme");var m=window.matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m)){document.documentElement.classList.add("dark")}}catch(e){}})();`;
+// Applies the persisted theme (dark mode + brand accent) before first paint to
+// avoid a flash of the wrong color scheme or accent color.
+const themeScript = `(function(){try{var d=document.documentElement;var t=localStorage.getItem("theme");var m=window.matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&m)){d.classList.add("dark")}var a=localStorage.getItem("accent");if(a){d.style.setProperty("--accent",a)}}catch(e){}})();`;
 
 export default function RootLayout({children}: {children: ReactNode}) {
   return (
