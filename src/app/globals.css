@@ -6,7 +6,7 @@
 /* Brand accent (blue). Overridable at runtime via the theme color picker,
    which sets --accent on <html> and persists it to localStorage. */
 :root {
-  --accent: #2563eb;
+  --accent: #1877e0;
 }
 
 body {

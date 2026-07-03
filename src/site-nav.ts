@@ -8,5 +8,6 @@ export const SITE_NAV_ITEMS: readonly SiteNavItem[] = [
   {href: "/news", label: "ข่าวสาร"},
   {href: "/events", label: "กิจกรรม"},
   {href: "/social", label: "โซเชียล"},
+  {href: "/color-guide", label: "แนวทางการใช้สี"},
   {href: "/faq", label: "คำถามที่พบบ่อย"},
 ] as const;

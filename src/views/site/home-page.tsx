@@ -20,7 +20,7 @@ export function HomePage() {
   return (
     <>
       <section className="relative overflow-hidden">
-        <div className="from-accent to-accent absolute inset-0 bg-gradient-to-br via-[oklch(0.52_0.2_264)]" />
+        <div className="from-accent to-[oklch(from_var(--accent)_calc(l-0.14)_c_h)] absolute inset-0 bg-gradient-to-br" />
         <div className="relative mx-auto flex max-w-4xl flex-col items-center px-5 pb-16 pt-16 text-center sm:pt-20">
           <span className="text-accent-foreground/90 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium backdrop-blur">
             <ShieldCheck className="size-3.5" />
@@ -110,7 +110,7 @@ export function HomePage() {
         </section>
 
         <section className="mt-14">
-          <div className="from-accent to-accent relative overflow-hidden rounded-3xl bg-gradient-to-r via-[oklch(0.52_0.2_264)] p-8 sm:p-10">
+          <div className="from-accent to-[oklch(from_var(--accent)_calc(l-0.14)_c_h)] relative overflow-hidden rounded-3xl bg-gradient-to-r p-8 sm:p-10">
             <div className="relative flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-4">
                 <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-white/15 text-white backdrop-blur">
