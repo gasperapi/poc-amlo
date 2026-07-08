@@ -489,7 +489,7 @@ function SectionHeading({
   icon: Icon,
   title,
 }: {
-  description: string;
+  description?: string;
   icon: IconType;
   title: string;
 }) {
@@ -500,7 +500,7 @@ function SectionHeading({
       </span>
       <div className="min-w-0">
         <h2 className="text-foreground text-xl font-semibold">{title}</h2>
-        <p className="text-muted mt-1 max-w-2xl text-sm leading-6">{description}</p>
+        {description ? <p className="text-muted mt-1 max-w-2xl text-sm leading-6">{description}</p> : null}
       </div>
     </div>
   );
@@ -606,10 +606,10 @@ export function PrototypePage() {
     setActiveServiceId(serviceId);
     setDraft((current) => ({...current, serviceId}));
     recordVisit({
-      group: language === "th" ? service.tag : service.tagEn,
+      group: service.tag,
       id: service.id,
-      tags: language === "th" ? [service.tag, ...service.fields] : [service.tagEn, ...service.fieldsEn],
-      title: language === "th" ? service.title : service.titleEn,
+      tags: [service.tag, ...service.fields],
+      title: service.title,
     });
   };
 
@@ -697,6 +697,47 @@ export function PrototypePage() {
 
   return (
     <div className={shellClass} style={{fontSize: `${fontScale}rem`}}>
+      <div className="border-separator bg-surface/95 sticky top-16 z-30 border-b backdrop-blur">
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-wrap gap-2">
+            {ROLE_OPTIONS.map((item) => (
+              <Button
+                key={item.id}
+                aria-label={`${item.label}: ${item.description}`}
+                className={role === item.id ? "bg-[#0b2f6b] text-white" : undefined}
+                size="sm"
+                variant={role === item.id ? "primary" : "secondary"}
+                onPress={() => {
+                  setRole(item.id);
+                  setSecurityLogs((current) => [`สลับบทบาทเป็น ${item.label}`, ...current].slice(0, 6));
+                }}
+              >
+                {item.label}
+              </Button>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <TogglePill isActive={language === "th"} label="TH" onPress={() => setLanguage("th")} />
+            <TogglePill isActive={language === "en"} label="EN" onPress={() => setLanguage("en")} />
+            <Button size="sm" variant="secondary" onPress={() => setFontScale(Math.max(0.9, Number((fontScale - 0.05).toFixed(2))))}>
+              A-
+            </Button>
+            <Button size="sm" variant="secondary" onPress={() => setFontScale(Math.min(1.2, Number((fontScale + 0.05).toFixed(2))))}>
+              A+
+            </Button>
+            <Button size="sm" variant={contrastMode === "contrast" ? "primary" : "secondary"} onPress={() => setContrastMode(contrastMode === "contrast" ? "normal" : "contrast")}>
+              คอนทราสต์
+            </Button>
+            <Button size="sm" variant={contrastMode === "gray" ? "primary" : "secondary"} onPress={() => setContrastMode(contrastMode === "gray" ? "normal" : "gray")}>
+              ขาวดำ
+            </Button>
+            <Button size="sm" variant="danger-soft" onPress={resetDemo}>
+              รีเซ็ต
+            </Button>
+          </div>
+        </div>
+      </div>
+
       <section className="relative overflow-hidden bg-[#0b2f6b] text-white">
         <div className="absolute inset-x-0 top-0 h-3 bg-[#d71920]" />
         <div className="absolute inset-x-0 top-3 h-3 bg-white" />
@@ -711,23 +752,13 @@ export function PrototypePage() {
                 </h1>
               </div>
             </div>
-            <p className="max-w-2xl text-base leading-7 text-white/78">
-              {copy.heroBody}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {["Search", "Chatbot", "CMS", "WCAG 2.2", "ThaiD Mock", "API Dashboard"].map((item) => (
-                <span key={item} className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm text-white">
-                  {item}
-                </span>
-              ))}
-            </div>
             <div className="flex flex-wrap gap-3">
               <Button className="bg-white text-[#0b2f6b]" variant="tertiary" onPress={() => selectService("complaint")}>
-                {copy.heroCta}
+                แจ้งเบาะแส
                 <ArrowRight className="size-4" />
               </Button>
               <Button className="border-white/35 text-white" variant="outline" onPress={() => setRole("officer")}>
-                {copy.heroOfficer}
+                สำหรับเจ้าหน้าที่
               </Button>
             </div>
           </div>
@@ -738,10 +769,10 @@ export function PrototypePage() {
               {STAT_ITEMS.map((item) => (
                 <div key={item.label} className="rounded-2xl bg-white/12 p-4">
                   <p className="text-2xl font-bold tabular-nums">
-                    {language === "th" ? item.value : item.valueEn}
+                    {item.value}
                   </p>
                   <p className="mt-1 text-sm leading-5 text-white/72">
-                    {language === "th" ? item.label : item.labelEn}
+                    {item.label}
                   </p>
                   <span className="mt-3 inline-flex rounded-full bg-white px-2 py-0.5 text-xs font-medium text-[#0b2f6b]">
                     {item.trend}
@@ -753,73 +784,24 @@ export function PrototypePage() {
         </div>
       </section>
 
-      <div className="border-separator bg-surface/95 sticky top-16 z-30 border-b backdrop-blur">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex flex-wrap gap-2">
-            {ROLE_OPTIONS.map((item) => (
-              <Button
-                key={item.id}
-                aria-label={`${language === "th" ? item.label : item.labelEn}: ${
-                  language === "th" ? item.description : item.descriptionEn
-                }`}
-                className={role === item.id ? "bg-[#0b2f6b] text-white" : undefined}
-                size="sm"
-                variant={role === item.id ? "primary" : "secondary"}
-                onPress={() => {
-                  setRole(item.id);
-                  setSecurityLogs((current) =>
-                    [
-                      language === "th" ? `สลับ role เป็น ${item.label}` : `Role changed to ${item.labelEn}`,
-                      ...current,
-                    ].slice(0, 6),
-                  );
-                }}
-              >
-                {language === "th" ? item.label : item.labelEn}
-              </Button>
-            ))}
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <TogglePill isActive={language === "th"} label="TH" onPress={() => setLanguage("th")} />
-            <TogglePill isActive={language === "en"} label="EN" onPress={() => setLanguage("en")} />
-            <Button size="sm" variant="secondary" onPress={() => setFontScale(Math.max(0.9, Number((fontScale - 0.05).toFixed(2))))}>
-              A-
-            </Button>
-            <Button size="sm" variant="secondary" onPress={() => setFontScale(Math.min(1.2, Number((fontScale + 0.05).toFixed(2))))}>
-              A+
-            </Button>
-            <Button size="sm" variant={contrastMode === "contrast" ? "primary" : "secondary"} onPress={() => setContrastMode(contrastMode === "contrast" ? "normal" : "contrast")}>
-              Contrast
-            </Button>
-            <Button size="sm" variant={contrastMode === "gray" ? "primary" : "secondary"} onPress={() => setContrastMode(contrastMode === "gray" ? "normal" : "gray")}>
-              Gray
-            </Button>
-            <Button size="sm" variant="danger-soft" onPress={resetDemo}>
-              {copy.navReset}
-            </Button>
-          </div>
-        </div>
-      </div>
-
       <div className="mx-auto flex max-w-6xl flex-col gap-12 px-5 py-10">
         <section className="grid gap-6 lg:grid-cols-[1fr_360px]">
           <div className="flex min-w-0 flex-col gap-5">
             <SectionHeading
-              description={copy.searchBody}
               icon={Magnifier}
-              title={copy.searchTitle}
+              title="ค้นหาข้อมูล"
             />
 
             <div className="relative">
               <SearchField aria-label="ค้นหาข้อมูลบนเว็บไซต์" value={query} onChange={setQuery}>
                 <SearchField.Group className="h-14 rounded-2xl bg-surface px-2 shadow-surface">
                   <SearchField.SearchIcon className="ml-2 size-5" />
-                  <SearchField.Input placeholder={copy.searchPlaceholder} />
+                  <SearchField.Input placeholder="ค้นหา เช่น บัญชีม้า, ขายทอดตลาด, แจ้งเบาะแส, รายชื่อบุคคล" />
                   <SearchField.ClearButton />
                 </SearchField.Group>
               </SearchField>
               <div className="mt-3 flex flex-wrap gap-2">
-                {copy.searchChips.map((item) => (
+                {["บัญชีม้า", "ขายทอดตลาด", "แจ้งเบาะแส", "รายชื่อบุคคล", "นโยบายความเป็นส่วนตัว"].map((item) => (
                   <Button key={item} size="sm" variant="secondary" onPress={() => setQuery(item)}>
                     {item}
                   </Button>
@@ -836,23 +818,23 @@ export function PrototypePage() {
                   onClick={() => {
                     if (item.type === "service") selectService(item.id as ServiceId);
                     recordVisit({
-                      group: language === "th" ? item.group : item.groupEn,
+                      group: item.group,
                       id: item.id,
-                      tags: language === "th" ? item.tags : item.tagsEn,
-                      title: language === "th" ? item.title : item.titleEn,
+                      tags: item.tags,
+                      title: item.title,
                     });
                   }}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <Chip size="sm" variant="soft">
-                        {language === "th" ? item.group : item.groupEn}
+                        {item.group}
                       </Chip>
                       <p className="text-foreground mt-3 text-sm font-semibold leading-6">
-                        {language === "th" ? item.title : item.titleEn}
+                        {item.title}
                       </p>
                       <p className="text-muted mt-2 line-clamp-1 text-xs">
-                        {(language === "th" ? item.tags : item.tagsEn).join(" · ")}
+                        {item.tags.join(" · ")}
                       </p>
                     </div>
                     <ArrowRight className="text-muted mt-1 size-4 shrink-0" />
@@ -876,17 +858,17 @@ export function PrototypePage() {
                         <Card.Title className="text-base">
                           {language === "th" ? service.title : service.titleEn}
                         </Card.Title>
-                        <Card.Description>{language === "th" ? service.tag : service.tagEn}</Card.Description>
+                        <Card.Description>{service.tag}</Card.Description>
                       </div>
                     </Card.Header>
                     <Card.Content className="px-0 py-4">
                       <p className="text-muted text-sm leading-6">
-                        {language === "th" ? service.description : service.descriptionEn}
+                        {service.description}
                       </p>
                     </Card.Content>
                     <Card.Footer className="p-0">
                       <Button fullWidth variant={isActive ? "primary" : "secondary"} onPress={() => selectService(service.id)}>
-                        {language === "th" ? "เปิดบริการนี้" : "Open service"}
+                        เปิดบริการ
                       </Button>
                     </Card.Footer>
                   </Card>
@@ -898,13 +880,12 @@ export function PrototypePage() {
           <aside className="flex flex-col gap-5">
             <div className="rounded-3xl bg-[#f8fafc] p-5 dark:bg-white/5">
               <SectionHeading
-                description={copy.personalizedBody}
                 icon={Bookmark}
-                title="Personalized"
+                title="ข้อมูลที่เข้าชมล่าสุด"
               />
               <div className="mt-5 flex flex-col gap-3">
                 {visits.length === 0 ? (
-                  <p className="text-muted text-sm">{copy.noHistory}</p>
+                  <p className="text-muted text-sm">ยังไม่มีประวัติการเข้าชม</p>
                 ) : (
                   visits.slice(0, 4).map((visit) => (
                     <button
@@ -927,7 +908,7 @@ export function PrototypePage() {
               <div className="mt-5 flex flex-wrap gap-2">
                 {recommended.map((service) => (
                   <Chip key={service.id} variant="soft">
-                    {language === "th" ? service.tag : service.tagEn}
+                    {service.tag}
                   </Chip>
                 ))}
               </div>
@@ -935,14 +916,13 @@ export function PrototypePage() {
 
             <div className="rounded-3xl bg-[#fff7f7] p-5 dark:bg-white/5">
               <SectionHeading
-                description={copy.registerBody}
                 icon={PersonPlus}
-                title="Registration"
+                title="ลงทะเบียนผู้ใช้งาน"
               />
               <div className="mt-5 space-y-3">
                 <input
                   className="border-border bg-surface text-foreground h-11 w-full rounded-xl border px-3 text-sm outline-none"
-                  placeholder={copy.userPlaceholder}
+                  placeholder="ชื่อผู้ใช้งาน / ThaiD"
                   value={draft.name}
                   onChange={(event) => setDraft({...draft, name: event.target.value})}
                 />
@@ -952,11 +932,29 @@ export function PrototypePage() {
                   value={draft.phone}
                   onChange={(event) => setDraft({...draft, phone: event.target.value})}
                 />
-                <div className="flex items-center justify-between rounded-2xl bg-surface p-3 shadow-surface">
-                  <span className="text-sm">Captcha mock: 7 + 2 = 9</span>
-                  <Button size="sm" variant={captchaOk ? "primary" : "secondary"} onPress={() => setCaptchaOk(!captchaOk)}>
-                    {captchaOk ? copy.captchaPassed : copy.captchaConfirm}
-                  </Button>
+                <div className="border-border bg-surface flex items-center justify-between rounded-2xl border p-4 shadow-surface">
+                  <button
+                    className="flex min-w-0 items-center gap-3 text-left"
+                    type="button"
+                    onClick={() => setCaptchaOk(!captchaOk)}
+                  >
+                    <span
+                      className={`flex size-7 shrink-0 items-center justify-center rounded-md border ${
+                        captchaOk
+                          ? "border-[#0b2f6b] bg-[#0b2f6b] text-white"
+                          : "border-border bg-background"
+                      }`}
+                    >
+                      {captchaOk ? <CircleCheck className="size-4" /> : null}
+                    </span>
+                    <span className="text-foreground text-sm font-medium">
+                      {captchaOk ? "ยืนยันความปลอดภัยแล้ว" : "ยืนยันว่าคุณเป็นมนุษย์"}
+                    </span>
+                  </button>
+                  <div className="flex shrink-0 flex-col items-end leading-tight">
+                    <span className="text-foreground text-xs font-semibold">Cloudflare</span>
+                    <span className="text-muted text-[10px]">Privacy · Terms</span>
+                  </div>
                 </div>
                 <Button fullWidth isDisabled={!captchaOk} onPress={() => {
                   setSecurityLogs((current) => [`Login mock role ${role}`, ...current].slice(0, 6));
@@ -974,32 +972,29 @@ export function PrototypePage() {
         <section className="grid gap-6 lg:grid-cols-[420px_1fr]">
           <div className="rounded-3xl bg-[#f8fafc] p-5 dark:bg-white/5">
             <SectionHeading
-              description={copy.formBody}
               icon={FileText}
-              title={language === "th" ? activeService.title : activeService.titleEn}
+              title={activeService.title}
             />
             <div className="mt-5 space-y-3">
               <textarea
                 className="border-border bg-surface text-foreground min-h-32 w-full resize-y rounded-2xl border p-3 text-sm leading-6 outline-none"
                 placeholder={
-                  language === "th"
-                    ? `รายละเอียดสำหรับ${activeService.title}`
-                    : `Details for ${activeService.titleEn}`
+                  `รายละเอียดสำหรับ${activeService.title}`
                 }
                 value={draft.detail}
                 onChange={(event) => setDraft({...draft, detail: event.target.value})}
               />
               <input
                 className="border-border bg-surface text-foreground h-11 w-full rounded-xl border px-3 text-sm outline-none"
-                placeholder={copy.attachmentPlaceholder}
+                placeholder="ชื่อไฟล์แนบ เช่น evidence.pdf"
                 value={draft.attachment}
                 onChange={(event) => setDraft({...draft, attachment: event.target.value})}
               />
               <div className="grid grid-cols-2 gap-3">
                 <Button variant="secondary" onPress={() => toast("Draft saved", {description: "ข้อมูลถูกจำไว้ใน localStorage"})}>
-                  {copy.saveDraft}
+                  บันทึกแบบร่าง
                 </Button>
-                <Button onPress={submitDraft}>{copy.submit}</Button>
+                <Button onPress={submitDraft}>ส่งคำร้อง</Button>
               </div>
             </div>
             <div className="mt-5 flex flex-wrap gap-2">
@@ -1013,16 +1008,15 @@ export function PrototypePage() {
 
           <div className="flex flex-col gap-5">
             <SectionHeading
-              description={copy.technicalBody}
               icon={Database}
-              title={copy.technicalTitle}
+              title="บริการข้อมูล"
             />
             <div className="grid gap-4 md:grid-cols-3">
               {AUCTION_ITEMS.map((item) => (
                 <Card key={item.asset} className="overflow-hidden p-0">
                   <div className="relative aspect-[16/9] w-full">
                     <Image
-                      alt={language === "th" ? item.asset : item.assetEn}
+                      alt={item.asset}
                       className="object-cover"
                       fill
                       sizes="(max-width: 768px) 100vw, 33vw"
@@ -1030,13 +1024,13 @@ export function PrototypePage() {
                     />
                   </div>
                   <Card.Content className="p-4">
-                    <Chip size="sm" variant="soft">{language === "th" ? item.status : item.statusEn}</Chip>
+                    <Chip size="sm" variant="soft">{item.status}</Chip>
                     <h3 className="text-foreground mt-3 text-sm font-semibold">
-                      {language === "th" ? item.asset : item.assetEn}
+                      {item.asset}
                     </h3>
-                    <p className="text-muted mt-1 text-xs">{language === "th" ? item.date : item.dateEn}</p>
+                    <p className="text-muted mt-1 text-xs">{item.date}</p>
                     <p className="mt-3 text-lg font-bold tabular-nums">
-                      {language === "th" ? item.price : item.priceEn}
+                      {item.price}
                     </p>
                   </Card.Content>
                 </Card>
@@ -1045,20 +1039,20 @@ export function PrototypePage() {
             <div className="grid gap-4 md:grid-cols-2">
               <div className="rounded-3xl bg-[#0b2f6b] p-5 text-white">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold">{copy.calendarTitle}</h3>
+                  <h3 className="font-semibold">ปฏิทินกิจกรรม</h3>
                   <Calendar className="size-5" />
                 </div>
                 <div className="mt-4 space-y-3">
                   {CALENDAR_ITEMS.map((item) => (
                     <div key={item.label} className="flex items-center gap-3 rounded-2xl bg-white/10 p-3">
                       <span className="w-16 text-sm font-bold">
-                        {language === "th" ? item.date : item.dateEn}
+                        {item.date}
                       </span>
                       <span className="min-w-0 flex-1 text-sm">
-                        {language === "th" ? item.label : item.labelEn}
+                        {item.label}
                       </span>
                       <span className="rounded-full bg-white px-2 py-0.5 text-xs text-[#0b2f6b]">
-                        {language === "th" ? item.role : item.roleEn}
+                        {item.role}
                       </span>
                     </div>
                   ))}
@@ -1066,7 +1060,7 @@ export function PrototypePage() {
               </div>
               <div className="rounded-3xl bg-[#fff7f7] p-5 dark:bg-white/5">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-foreground font-semibold">{copy.securityTitle}</h3>
+                  <h3 className="text-foreground font-semibold">บันทึกการใช้งาน</h3>
                   <ShieldCheck className="text-[#d71920] size-5" />
                 </div>
                 <div className="mt-4 space-y-2">
@@ -1092,13 +1086,12 @@ export function PrototypePage() {
         <section className="grid gap-6 lg:grid-cols-[1fr_380px]">
           <div className="flex flex-col gap-5">
             <SectionHeading
-              description={copy.cmsBody}
               icon={Gear}
-              title={copy.cmsTitle}
+              title="จัดการเนื้อหาเว็บไซต์"
             />
             {!canUseCms ? (
               <div className="rounded-3xl border border-dashed border-[#d71920]/40 bg-[#fff7f7] p-6 text-sm text-[#991b1b] dark:bg-white/5 dark:text-white">
-                {copy.cmsLocked}
+                เลือกบทบาทเจ้าหน้าที่หรือผู้บริหารเพื่อเปิดหน้าจัดการเนื้อหา
               </div>
             ) : (
               <div className="grid gap-5 lg:grid-cols-2">
@@ -1160,7 +1153,7 @@ export function PrototypePage() {
                   <div className="flex items-center justify-between gap-3">
                     <div>
                       <h3 className="font-semibold">Widget Order</h3>
-                      <p className="text-sm text-white/70">{copy.widgetHelp}</p>
+                      <p className="text-sm text-white/70">จัดลำดับวิดเจ็ตบนหน้าเว็บไซต์</p>
                     </div>
                     <Eye className="size-5" />
                   </div>
@@ -1181,7 +1174,7 @@ export function PrototypePage() {
                     ))}
                   </div>
                   <div className="mt-5 rounded-2xl bg-white p-4 text-[#0b2f6b]">
-                    <p className="text-sm font-semibold">{copy.bannerClickAnalytics}</p>
+                    <p className="text-sm font-semibold">สถิติการคลิก Banner</p>
                     <p className="mt-2 text-3xl font-bold tabular-nums">{cms.bannerClicks}</p>
                     <ProgressBar aria-label="Banner click progress" className="mt-3" value={74} />
                     <Button className="mt-4" size="sm" variant="secondary" onPress={() => setCms({...cms, bannerClicks: cms.bannerClicks + 1})}>
@@ -1196,12 +1189,11 @@ export function PrototypePage() {
 
           <div className="rounded-3xl bg-[#f8fafc] p-5 dark:bg-white/5">
             <SectionHeading
-              description={copy.notificationsBody}
               icon={Bell}
-              title={copy.notificationsTitle}
+              title="การแจ้งเตือน"
             />
             <div className="mt-5 space-y-3">
-              {NOTIFICATION_OPTIONS[language].map((item) => {
+              {NOTIFICATION_OPTIONS.th.map((item) => {
                 const Icon = item.icon;
 
                 return (
@@ -1215,20 +1207,14 @@ export function PrototypePage() {
                       variant={notifications[item.key] ? "primary" : "secondary"}
                       onPress={() => setNotifications({...notifications, [item.key]: !notifications[item.key]})}
                     >
-                      {notifications[item.key]
-                        ? language === "th"
-                          ? "เปิด"
-                          : "On"
-                        : language === "th"
-                          ? "ปิด"
-                          : "Off"}
+                      {notifications[item.key] ? "เปิด" : "ปิด"}
                     </Button>
                   </div>
                 );
               })}
               <div className="rounded-2xl bg-surface p-4 shadow-surface">
-                <p className="text-foreground text-sm font-semibold">{copy.uploadConfig}</p>
-                <p className="text-muted mt-1 text-sm">{copy.uploadPolicy}</p>
+                <p className="text-foreground text-sm font-semibold">ตั้งค่าไฟล์อัปโหลด</p>
+                <p className="text-muted mt-1 text-sm">สูงสุด 50 MB · MP3, MP4, PDF, WORD, EXCEL</p>
               </div>
             </div>
           </div>
@@ -1236,13 +1222,13 @@ export function PrototypePage() {
       </div>
 
       <Button
-        aria-label="iAMLO Chatbot"
-        className="fixed bottom-5 right-5 z-40 bg-[#d71920] text-white shadow-overlay max-sm:size-14 max-sm:rounded-full max-sm:p-0"
+        aria-label="เปิดผู้ช่วยอัจฉริยะ"
+        className="fixed bottom-5 right-5 z-40 bg-[#0b2f6b] text-white shadow-overlay ring-2 ring-white/80 hover:bg-[#123f86] max-sm:size-14 max-sm:rounded-full max-sm:p-0"
         size="lg"
         onPress={() => setChatOpen(true)}
       >
         <CircleQuestion className="size-5" />
-        <span className="hidden sm:inline">iAMLO Chatbot</span>
+        <span className="hidden sm:inline">ผู้ช่วยอัจฉริยะ</span>
       </Button>
 
       <Sheet isOpen={chatOpen} onOpenChange={setChatOpen}>
