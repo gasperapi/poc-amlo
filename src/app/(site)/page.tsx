@@ -1,5 +1,5 @@
-import {HomePage} from "../../views/site/home-page";
+import {redirect} from "next/navigation";
 
 export default function Page() {
-  return <HomePage />;
+  redirect("/prototype");
 }
