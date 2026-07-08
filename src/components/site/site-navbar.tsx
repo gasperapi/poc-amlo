@@ -23,12 +23,14 @@ function BrandMark() {
     <div className="flex items-center gap-2.5">
       <Image alt="ตราสัญลักษณ์ ปปง." className="size-9 object-contain" priority src={logo} />
       <div className="flex flex-col leading-none">
-        <span className="text-foreground text-base font-bold tracking-tight">ปปง.</span>
-        <span className="text-muted text-[11px] font-medium">ปราบปรามการฟอกเงิน</span>
+        <span className="text-foreground text-sm font-bold tracking-tight">สำนักงานป้องกันและ</span>
+        <span className="text-muted text-xs font-medium">ปราบปรามการฟอกเงิน</span>
       </div>
     </div>
   );
 }
+
+const VISIBLE_NAV_ITEMS = SITE_NAV_ITEMS.filter((item) => item.href === "/prototype");
 
 export function SiteNavbar() {
   const router = useRouter();
@@ -51,7 +53,7 @@ export function SiteNavbar() {
         <Navbar.Spacer />
 
         <Navbar.Content className="hidden md:flex">
-          {SITE_NAV_ITEMS.map((item) => (
+          {VISIBLE_NAV_ITEMS.map((item) => (
             <Navbar.Item key={item.href} href={item.href} isCurrent={isActive(pathname, item.href)}>
               {item.label}
             </Navbar.Item>
@@ -67,7 +69,7 @@ export function SiteNavbar() {
       </Navbar.Header>
 
       <Navbar.Menu>
-        {SITE_NAV_ITEMS.map((item) => (
+        {VISIBLE_NAV_ITEMS.map((item) => (
           <Navbar.MenuItem
             key={item.href}
             href={item.href}
