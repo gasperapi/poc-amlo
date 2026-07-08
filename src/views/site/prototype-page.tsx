@@ -496,14 +496,13 @@ export function PrototypePage() {
               <div>
                 <p className="text-sm text-white/75">Intelligent AMLO Website Prototype</p>
                 <h1 className="text-3xl font-bold leading-tight">
-                  iAMLO ช่องทางอิเล็กทรอนิกส์อัจฉริยะ
+                  iAMLO
                 </h1>
               </div>
             </div>
             <p className="max-w-2xl text-base leading-7 text-white/78">
               Prototype ตาม TOR สำหรับค้นหาแบบยืดหยุ่น บริการประชาชน Chatbot, Personalized,
               Universal Design, Registration, CMS, Notification, Config และ Dashboard API mock
-              ทั้งหมดคลิกเล่นได้และจำ state ผ่าน localStorage
             </p>
             <div className="flex flex-wrap gap-2">
               {["Search", "Chatbot", "CMS", "WCAG 2.2", "ThaiD Mock", "API Dashboard"].map((item) => (
