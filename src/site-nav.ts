@@ -5,6 +5,7 @@ export type SiteNavItem = {
 
 export const SITE_NAV_ITEMS: readonly SiteNavItem[] = [
   {href: "/", label: "หน้าแรก"},
+  {href: "/prototype", label: "iAMLO Prototype"},
   {href: "/news", label: "ข่าวสาร"},
   {href: "/events", label: "กิจกรรม"},
   {href: "/social", label: "โซเชียล"},
