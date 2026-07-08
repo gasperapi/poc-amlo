@@ -22,9 +22,10 @@ function BrandMark() {
   return (
     <div className="flex items-center gap-2.5">
       <Image alt="ตราสัญลักษณ์ ปปง." className="size-9 object-contain" priority src={logo} />
-      <div className="flex flex-col leading-none">
-        <span className="text-foreground text-sm font-bold tracking-tight">สำนักงานป้องกันและ</span>
-        <span className="text-muted text-xs font-medium">ปราบปรามการฟอกเงิน</span>
+      <div className="min-w-0 leading-none">
+        <span className="text-foreground block max-w-[190px] truncate text-[11px] font-bold tracking-tight sm:max-w-none sm:text-sm">
+          สำนักงานป้องกันและปราบปรามการฟอกเงิน
+        </span>
       </div>
     </div>
   );

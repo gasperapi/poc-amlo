@@ -962,7 +962,7 @@ export function PrototypePage() {
                     description: language === "th" ? "Session timeout mock: 20 นาที" : "Session timeout mock: 20 minutes",
                   });
                 }}>
-                  Login with ThaiD Mock
+                  Login with ThaiD
                 </Button>
               </div>
             </div>
