@@ -80,12 +80,48 @@ type CmsDraft = {
 
 const STORAGE_KEY = "iamlo-prototype-v1";
 
-const ROLE_OPTIONS: Array<{id: Role; label: string; description: string}> = [
-  {description: "ข่าวสาร บริการ และ Chatbot", id: "public", label: "ประชาชน"},
-  {description: "ติดตามคำร้องและเอกสาร", id: "applicant", label: "ผู้ขอรับบริการ"},
-  {description: "ข้อมูลประสานงาน API", id: "agency", label: "หน่วยงานภายนอก"},
-  {description: "CMS, notification, config", id: "officer", label: "เจ้าหน้าที่"},
-  {description: "Dashboard และอนุมัติ", id: "executive", label: "ผู้บริหาร"},
+const ROLE_OPTIONS: Array<{
+  id: Role;
+  label: string;
+  labelEn: string;
+  description: string;
+  descriptionEn: string;
+}> = [
+  {
+    description: "ข่าวสาร บริการ และ Chatbot",
+    descriptionEn: "News, services, and chatbot",
+    id: "public",
+    label: "ประชาชน",
+    labelEn: "Public",
+  },
+  {
+    description: "ติดตามคำร้องและเอกสาร",
+    descriptionEn: "Requests, documents, and case tracking",
+    id: "applicant",
+    label: "ผู้ขอรับบริการ",
+    labelEn: "Applicant",
+  },
+  {
+    description: "ข้อมูลประสานงาน API",
+    descriptionEn: "Partner APIs and coordination data",
+    id: "agency",
+    label: "หน่วยงานภายนอก",
+    labelEn: "External Agency",
+  },
+  {
+    description: "CMS, notification, config",
+    descriptionEn: "CMS, notifications, and configurations",
+    id: "officer",
+    label: "เจ้าหน้าที่",
+    labelEn: "Officer",
+  },
+  {
+    description: "Dashboard และอนุมัติ",
+    descriptionEn: "Executive dashboards and approvals",
+    id: "executive",
+    label: "ผู้บริหาร",
+    labelEn: "Executive",
+  },
 ];
 
 const SERVICES: Array<{
@@ -93,47 +129,66 @@ const SERVICES: Array<{
   title: string;
   titleEn: string;
   description: string;
+  descriptionEn: string;
   tag: string;
+  tagEn: string;
   icon: IconType;
   tone: string;
   fields: string[];
+  fieldsEn: string[];
 }> = [
   {
     description: "ยื่นข้อมูลเบาะแส ร้องทุกข์ หรือร้องเรียนการทุจริตเจ้าหน้าที่ พร้อมเลขติดตาม",
+    descriptionEn:
+      "Submit a complaint, tip-off, or officer misconduct report with a mock tracking number.",
     fields: ["ประเภทเรื่อง", "รายละเอียดเหตุการณ์", "ช่องทางติดต่อ", "แนบหลักฐาน"],
+    fieldsEn: ["Case type", "Incident details", "Contact channel", "Evidence attachment"],
     icon: ShieldCheck,
     id: "complaint",
     tag: "บริการประชาชน",
+    tagEn: "Citizen Service",
     title: "รับเรื่องร้องเรียนแจ้งเบาะแส",
     titleEn: "Complaint & Tip Submission",
     tone: "text-[#d71920] bg-[#d71920]/10",
   },
   {
     description: "ค้นหาสถานะบัญชี/คดีที่อยู่ระหว่างคุ้มครองสิทธิ และยื่นคำร้องเบื้องต้น",
+    descriptionEn:
+      "Search protected account or case status and prepare an initial victim rights request.",
     fields: ["เลขบัญชี", "ชื่อบัญชี", "ข้อมูลรายคดี", "เอกสารยืนยันตัวตน"],
+    fieldsEn: ["Bank account no.", "Account name", "Case information", "Identity documents"],
     icon: ScalesBalanced,
     id: "rights",
     tag: "คุ้มครองสิทธิ",
+    tagEn: "Victim Rights",
     title: "คุ้มครองสิทธิผู้เสียหาย",
     titleEn: "Victim Rights Protection",
     tone: "text-[#0b2f6b] bg-[#0b2f6b]/10",
   },
   {
     description: "ตรวจสอบรายชื่อบุคคลที่ถูกกำหนดจากชื่อ นามสกุล หรือเลขประจำตัว",
+    descriptionEn:
+      "Search designated persons by name, surname, or personal identification number.",
     fields: ["เลขบัตรประชาชน", "ชื่อ", "นามสกุล", "เหตุผลการค้นหา"],
+    fieldsEn: ["National ID", "First name", "Surname", "Search reason"],
     icon: Lock,
     id: "sanction",
     tag: "รายชื่อบุคคลที่ถูกกำหนด",
+    tagEn: "Designated Persons",
     title: "สืบค้นประกาศรายชื่อบุคคลที่ถูกกำหนด",
     titleEn: "Designated Persons Search",
     tone: "text-[#111827] bg-[#111827]/10",
   },
   {
     description: "ดูทรัพย์สินรอประมูล ภาพถ่าย ราคาเริ่มต้น และกำหนดการขายทอดตลาด",
+    descriptionEn:
+      "Browse auction assets with images, starting prices, and scheduled auction dates.",
     fields: ["ประเภททรัพย์", "ช่วงราคา", "จังหวัด", "วันประมูล"],
+    fieldsEn: ["Asset type", "Price range", "Province", "Auction date"],
     icon: FolderOpen,
     id: "auction",
     tag: "ขายทอดตลาด",
+    tagEn: "Asset Auction",
     title: "ขายทอดตลาดทรัพย์สิน",
     titleEn: "Asset Auction",
     tone: "text-[#0f766e] bg-[#0f766e]/10",
@@ -143,37 +198,52 @@ const SERVICES: Array<{
 const SEARCH_INDEX = [
   ...SERVICES.map((service) => ({
     group: "บริการ",
+    groupEn: "Service",
     id: service.id,
     title: service.title,
+    titleEn: service.titleEn,
     type: "service" as const,
     tags: [service.tag, ...service.fields],
+    tagsEn: [service.tagEn, ...service.fieldsEn],
   })),
   {
     group: "FAQ",
+    groupEn: "FAQ",
     id: "faq-complaint",
     tags: ["Chatbot", "FAQ", "แจ้งเบาะแส"],
+    tagsEn: ["Chatbot", "FAQ", "Tip submission"],
     title: "แจ้งเบาะแสต้องใช้เอกสารอะไรบ้าง",
+    titleEn: "What documents are needed for a tip submission?",
     type: "content" as const,
   },
   {
     group: "ข่าวสาร",
+    groupEn: "News",
     id: "news-fake",
     tags: ["ข่าวปลอม", "เตือนภัย", "แก๊งคอลเซ็นเตอร์"],
+    tagsEn: ["Fake news", "Fraud alert", "Call center scam"],
     title: "เตือนภัยมิจฉาชีพแอบอ้างเป็นเจ้าหน้าที่ ปปง.",
+    titleEn: "Fraud alert: scammers impersonating AMLO officers",
     type: "content" as const,
   },
   {
     group: "นโยบาย",
+    groupEn: "Policy",
     id: "policy",
     tags: ["Privacy Policy", "Cookies Policy", "Website Security Policy"],
+    tagsEn: ["Privacy Policy", "Cookies Policy", "Website Security Policy"],
     title: "นโยบายเว็บไซต์ ความเป็นส่วนตัว คุกกี้ และความมั่นคงปลอดภัย",
+    titleEn: "Website, privacy, cookies, and security policies",
     type: "content" as const,
   },
   {
     group: "Dashboard",
+    groupEn: "Dashboard",
     id: "stats",
     tags: ["API", "Dashboard", "สถิติ"],
+    tagsEn: ["API", "Dashboard", "Statistics"],
     title: "Dashboard แสดงผลข้อมูลจาก API และสถิติสำคัญ",
+    titleEn: "API dashboard and key statistics",
     type: "content" as const,
   },
 ];
@@ -181,39 +251,51 @@ const SEARCH_INDEX = [
 const AUCTION_ITEMS = [
   {
     asset: "คอนโดมิเนียม เขตบางนา",
+    assetEn: "Condominium in Bang Na",
     date: "18 ก.ค. 2569",
+    dateEn: "18 Jul 2026",
     image: "/images/amlo/news/news-4.png",
     price: "2.85 ลบ.",
+    priceEn: "THB 2.85M",
     status: "เปิดลงทะเบียน",
+    statusEn: "Registration open",
   },
   {
     asset: "รถยนต์อเนกประสงค์",
+    assetEn: "Multi-purpose vehicle",
     date: "25 ก.ค. 2569",
+    dateEn: "25 Jul 2026",
     image: "/images/amlo/news/news-5.png",
     price: "790,000 บ.",
+    priceEn: "THB 790K",
     status: "รอตรวจสอบเอกสาร",
+    statusEn: "Documents pending",
   },
   {
     asset: "ที่ดินพร้อมสิ่งปลูกสร้าง",
+    assetEn: "Land with building",
     date: "2 ส.ค. 2569",
+    dateEn: "2 Aug 2026",
     image: "/images/amlo/news/news-6.png",
     price: "7.4 ลบ.",
+    priceEn: "THB 7.4M",
     status: "ใกล้ปิดรับ",
+    statusEn: "Closing soon",
   },
 ];
 
 const CALENDAR_ITEMS = [
-  {date: "12 ก.ค.", label: "อบรม ATS", role: "ประชาชน"},
-  {date: "18 ก.ค.", label: "ขายทอดตลาด", role: "ผู้ขอรับบริการ"},
-  {date: "21 ก.ค.", label: "ประชาพิจารณ์กฎหมาย", role: "หน่วยงานภายนอก"},
-  {date: "31 ก.ค.", label: "รายงานผู้บริหาร", role: "ผู้บริหาร"},
+  {date: "12 ก.ค.", dateEn: "12 Jul", label: "อบรม ATS", labelEn: "ATS training", role: "ประชาชน", roleEn: "Public"},
+  {date: "18 ก.ค.", dateEn: "18 Jul", label: "ขายทอดตลาด", labelEn: "Asset auction", role: "ผู้ขอรับบริการ", roleEn: "Applicant"},
+  {date: "21 ก.ค.", dateEn: "21 Jul", label: "ประชาพิจารณ์กฎหมาย", labelEn: "Legal hearing", role: "หน่วยงานภายนอก", roleEn: "Agency"},
+  {date: "31 ก.ค.", dateEn: "31 Jul", label: "รายงานผู้บริหาร", labelEn: "Executive report", role: "ผู้บริหาร", roleEn: "Executive"},
 ];
 
 const STAT_ITEMS = [
-  {label: "มูลค่าทรัพย์รอขายทอดตลาด", value: "348 ลบ.", trend: "+12%"},
-  {label: "คำร้องคุ้มครองสิทธิ", value: "1,246", trend: "+8%"},
-  {label: "รายการแจ้งเบาะแสเดือนนี้", value: "2,891", trend: "+18%"},
-  {label: "FAQ ที่ Chatbot ตอบได้", value: "94%", trend: "+6%"},
+  {label: "มูลค่าทรัพย์รอขายทอดตลาด", labelEn: "Auction asset value", value: "348 ลบ.", valueEn: "THB 348M", trend: "+12%"},
+  {label: "คำร้องคุ้มครองสิทธิ", labelEn: "Rights protection requests", value: "1,246", valueEn: "1,246", trend: "+8%"},
+  {label: "รายการแจ้งเบาะแสเดือนนี้", labelEn: "Tip submissions this month", value: "2,891", valueEn: "2,891", trend: "+18%"},
+  {label: "FAQ ที่ Chatbot ตอบได้", labelEn: "FAQ coverage by chatbot", value: "94%", valueEn: "94%", trend: "+6%"},
 ];
 
 const DEFAULT_DRAFT: DraftForm = {
@@ -242,6 +324,113 @@ const DEFAULT_CHAT: ChatMessage[] = [
     text: "สวัสดีค่ะ ผู้ช่วย iAMLO ช่วยแนะนำการแจ้งเบาะแส คุ้มครองสิทธิ FAQ และบริการของ ปปง. ได้",
   },
 ];
+
+const DEFAULT_CHAT_EN: ChatMessage[] = [
+  {
+    from: "bot",
+    id: "welcome",
+    text: "Hello, I am the iAMLO assistant. I can help with complaints, victim rights, FAQs, and AMLO public services.",
+  },
+];
+
+const COPY = {
+  en: {
+    attachmentPlaceholder: "Attachment filename, e.g. evidence.pdf",
+    bannerClickAnalytics: "Banner Click Analytics",
+    captchaConfirm: "Verify",
+    captchaPassed: "Verified",
+    chatbotHeading: "iAMLO Intelligent Assistant",
+    chatbotPlaceholder: "Type a question...",
+    chatPrompts: ["Submit a complaint", "Victim rights", "Asset auction"],
+    clearChat: "Clear chat",
+    cmsBody:
+      "CMS, preview, translation, layout presets, widget ordering, banner analytics, and duplicate-title alerts",
+    cmsLocked:
+      "Select Officer or Executive to open the TOR workbench for CMS, Notifications, and Configurations.",
+    cmsTitle: "Officer CMS & Config",
+    duplicateTitle: "Duplicate title detected. The system alerts the editor before publishing.",
+    formBody: "Mock service form with autosaved draft and tracking number",
+    heroBody:
+      "TOR-aligned prototype for flexible search, citizen services, chatbot, personalization, universal design, registration, CMS, notifications, configurations, and API dashboard mocks. All interactions persist in localStorage.",
+    heroCta: "Start Tip Submission",
+    heroOfficer: "Try Officer Mode",
+    navReset: "Reset",
+    notificationsBody: "Toggle sound, vibration, banners, and configure upload policy",
+    notificationsTitle: "Notifications",
+    noHistory: "No history yet. Click a service or search result to generate Last Visited data.",
+    personalizedBody: "Based on the latest clicked topics and interest tags",
+    registerBody: "Mock login and registration for 5 user groups",
+    saveDraft: "Save Draft",
+    searchBody: "Traditional search, tag search, prompt suggestions, and flexible search for services/news/FAQ/policy",
+    searchChips: ["Mule account", "Asset auction", "Tip submission", "Designated persons", "Privacy Policy"],
+    searchPlaceholder: "Search: mule account, asset auction, Privacy Policy, Dashboard API",
+    searchTitle: "Smart Search & Citizen Services",
+    send: "Send",
+    submit: "Submit Request",
+    technicalTitle: "API Dashboard Mock",
+    technicalBody: "TOR-specific mock modules: auction, calendar, dashboard, and API integration",
+    calendarTitle: "Access-based Event Calendar",
+    securityTitle: "Security & Transaction Log",
+    uploadConfig: "Upload Config",
+    uploadPolicy: "Max 50 MB · MP3, MP4, PDF, WORD, EXCEL",
+    userPlaceholder: "Username / ThaiD mock",
+    widgetHelp: "Mock Drag & Drop using order controls",
+  },
+  th: {
+    attachmentPlaceholder: "ชื่อไฟล์แนบ เช่น evidence.pdf",
+    bannerClickAnalytics: "Banner Click Analytics",
+    captchaConfirm: "ยืนยัน",
+    captchaPassed: "ผ่านแล้ว",
+    chatbotHeading: "ผู้ช่วยอัจฉริยะ iAMLO",
+    chatbotPlaceholder: "พิมพ์คำถาม...",
+    chatPrompts: ["ยื่นเรื่องร้องเรียน", "คุ้มครองสิทธิ", "ขายทอดตลาด"],
+    clearChat: "ล้างแชท",
+    cmsBody: "CMS, preview, translation, layout, widget ordering, banner analytics และ duplicate-title notification",
+    cmsLocked:
+      "เลือก role “เจ้าหน้าที่” หรือ “ผู้บริหาร” ด้านบนเพื่อเปิด workbench ตาม TOR ข้อ CMS / Notifications / Configurations",
+    cmsTitle: "Officer CMS & Config",
+    duplicateTitle: "พบหัวเรื่องซ้ำ ระบบแจ้งเตือนก่อนเผยแพร่",
+    formBody: "ฟอร์มบริการจำลองพร้อม autosave draft และเลขติดตาม",
+    heroBody:
+      "Prototype ตาม TOR สำหรับค้นหาแบบยืดหยุ่น บริการประชาชน Chatbot, Personalized, Universal Design, Registration, CMS, Notification, Config และ Dashboard API mock ทั้งหมดคลิกเล่นได้และจำ state ผ่าน localStorage",
+    heroCta: "เริ่มแจ้งเบาะแส",
+    heroOfficer: "ทดลองโหมดเจ้าหน้าที่",
+    navReset: "Reset",
+    notificationsBody: "เปิด/ปิดเสียง สั่น Banner และกำหนด upload policy",
+    notificationsTitle: "Notifications",
+    noHistory: "ยังไม่มีประวัติ กดบริการหรือผลค้นหาเพื่อสร้าง Last Visited",
+    personalizedBody: "จำจากหัวข้อที่ผู้ใช้คลิกล่าสุดและ tag ที่สนใจ",
+    registerBody: "Mock login / registration สำหรับ 5 กลุ่มผู้ใช้งาน",
+    saveDraft: "บันทึกแบบร่าง",
+    searchBody: "Traditional search, tags search, prompt suggestion และ flexible search สำหรับบริการ/ข่าว/FAQ/Policy",
+    searchChips: ["บัญชีม้า", "ขายทอดตลาด", "แจ้งเบาะแส", "รายชื่อบุคคล", "Privacy Policy"],
+    searchPlaceholder: "ค้นหา เช่น บัญชีม้า, ขายทอดตลาด, Privacy Policy, Dashboard API",
+    searchTitle: "Smart Search & Citizen Services",
+    send: "ส่ง",
+    submit: "ส่งคำร้อง",
+    technicalTitle: "API Dashboard Mock",
+    technicalBody: "ตัวอย่างข้อมูลเฉพาะระบบจาก TOR: auction, calendar, dashboard และ API integration",
+    calendarTitle: "ปฏิทินกิจกรรมตามสิทธิ์",
+    securityTitle: "Security & Transaction Log",
+    uploadConfig: "Upload Config",
+    uploadPolicy: "สูงสุด 50 MB · MP3, MP4, PDF, WORD, EXCEL",
+    userPlaceholder: "ชื่อผู้ใช้งาน / ThaiD mock",
+    widgetHelp: "จำลอง Drag & Drop ด้วยปุ่มเลื่อนลำดับ",
+  },
+} as const;
+
+const NOTIFICATION_OPTIONS = {
+  en: [
+    {key: "sound" as const, label: "Sound alert", icon: Volume},
+    {key: "vibration" as const, label: "Device vibration", icon: Bell},
+    {key: "banner" as const, label: "Banner notification", icon: FileText},
+  ],
+  th: [
+    {key: "sound" as const, label: "เสียงแจ้งเตือน", icon: Volume},
+    {key: "vibration" as const, label: "สั่นบนอุปกรณ์", icon: Bell},
+    {key: "banner" as const, label: "Banner แจ้งเตือน", icon: FileText},
+  ],
+} as const;
 
 function nowLabel() {
   return new Intl.DateTimeFormat("th-TH", {
@@ -362,8 +551,17 @@ export function PrototypePage() {
   const [captchaOk, setCaptchaOk] = useStoredState<boolean>("captcha", false);
   const [chatInput, setChatInput] = useState("");
   const [chatOpen, setChatOpen] = useState(false);
+  const copy = COPY[language];
 
   const activeService = SERVICES.find((service) => service.id === activeServiceId) ?? SERVICES[0];
+
+  useEffect(() => {
+    setChat((current) => {
+      if (current.length !== 1 || current[0]?.id !== "welcome") return current;
+
+      return language === "th" ? DEFAULT_CHAT : DEFAULT_CHAT_EN;
+    });
+  }, [language, setChat]);
 
   const searchResults = useMemo(() => {
     const clean = query.trim().toLowerCase();
@@ -371,7 +569,9 @@ export function PrototypePage() {
     if (!clean) return SEARCH_INDEX.slice(0, 5);
 
     return SEARCH_INDEX.filter((item) =>
-      [item.title, item.group, ...item.tags].some((text) => text.toLowerCase().includes(clean)),
+      [item.title, item.titleEn, item.group, item.groupEn, ...item.tags, ...item.tagsEn].some((text) =>
+        text.toLowerCase().includes(clean),
+      ),
     );
   }, [query]);
 
@@ -385,7 +585,9 @@ export function PrototypePage() {
     if (interestTags.length === 0) return SERVICES.slice(0, 3);
 
     return SERVICES.filter((service) =>
-      [service.tag, ...service.fields].some((tag) => interestTags.includes(tag)),
+      [service.tag, service.tagEn, ...service.fields, ...service.fieldsEn].some((tag) =>
+        interestTags.includes(tag),
+      ),
     ).slice(0, 3);
   }, [interestTags]);
 
@@ -404,10 +606,10 @@ export function PrototypePage() {
     setActiveServiceId(serviceId);
     setDraft((current) => ({...current, serviceId}));
     recordVisit({
-      group: service.tag,
+      group: language === "th" ? service.tag : service.tagEn,
       id: service.id,
-      tags: [service.tag, ...service.fields],
-      title: service.title,
+      tags: language === "th" ? [service.tag, ...service.fields] : [service.tagEn, ...service.fieldsEn],
+      title: language === "th" ? service.title : service.titleEn,
     });
   };
 
@@ -426,11 +628,20 @@ export function PrototypePage() {
 
     if (!clean) return;
 
-    const answer = clean.includes("คุ้มครอง")
-      ? "กรณีคุ้มครองสิทธิ ให้เตรียมเลขบัญชี ชื่อบัญชี รายละเอียดคดี และเอกสารยืนยันตัวตน ระบบจะบันทึก draft ให้กลับมาทำต่อได้"
-      : clean.includes("ขายทอดตลาด")
-        ? "หน้าขายทอดตลาดรองรับภาพทรัพย์ ราคาเริ่มต้น วันประมูล และสถานะการลงทะเบียน โดยข้อมูลนี้เป็น mock สำหรับ prototype"
-        : "สามารถเริ่มจากเลือกบริการด้านซ้าย ระบบจะจำ Last Visited, ความสนใจ และ draft ผ่าน localStorage เพื่อจำลอง Personalized service";
+    const isRights = clean.includes("คุ้มครอง") || clean.toLowerCase().includes("right");
+    const isAuction = clean.includes("ขายทอดตลาด") || clean.toLowerCase().includes("auction");
+    const answer =
+      language === "en"
+        ? isRights
+          ? "For victim rights, prepare account details, case information, and identity documents. The prototype keeps the draft in localStorage."
+          : isAuction
+            ? "The auction module shows asset images, starting prices, auction dates, and registration status using local mock data."
+            : "Start by selecting a service. The prototype remembers Last Visited, interests, and drafts in localStorage for personalization."
+        : isRights
+          ? "กรณีคุ้มครองสิทธิ ให้เตรียมเลขบัญชี ชื่อบัญชี รายละเอียดคดี และเอกสารยืนยันตัวตน ระบบจะบันทึก draft ให้กลับมาทำต่อได้"
+          : isAuction
+            ? "หน้าขายทอดตลาดรองรับภาพทรัพย์ ราคาเริ่มต้น วันประมูล และสถานะการลงทะเบียน โดยข้อมูลนี้เป็น mock สำหรับ prototype"
+            : "สามารถเริ่มจากเลือกบริการด้านซ้าย ระบบจะจำ Last Visited, ความสนใจ และ draft ผ่าน localStorage เพื่อจำลอง Personalized service";
 
     setChat((current) => [
       ...current,
@@ -501,8 +712,7 @@ export function PrototypePage() {
               </div>
             </div>
             <p className="max-w-2xl text-base leading-7 text-white/78">
-              Prototype ตาม TOR สำหรับค้นหาแบบยืดหยุ่น บริการประชาชน Chatbot, Personalized,
-              Universal Design, Registration, CMS, Notification, Config และ Dashboard API mock
+              {copy.heroBody}
             </p>
             <div className="flex flex-wrap gap-2">
               {["Search", "Chatbot", "CMS", "WCAG 2.2", "ThaiD Mock", "API Dashboard"].map((item) => (
@@ -513,11 +723,11 @@ export function PrototypePage() {
             </div>
             <div className="flex flex-wrap gap-3">
               <Button className="bg-white text-[#0b2f6b]" variant="tertiary" onPress={() => selectService("complaint")}>
-                เริ่มแจ้งเบาะแส
+                {copy.heroCta}
                 <ArrowRight className="size-4" />
               </Button>
               <Button className="border-white/35 text-white" variant="outline" onPress={() => setRole("officer")}>
-                ทดลองโหมดเจ้าหน้าที่
+                {copy.heroOfficer}
               </Button>
             </div>
           </div>
@@ -527,8 +737,12 @@ export function PrototypePage() {
             <div className="mt-5 grid grid-cols-2 gap-3">
               {STAT_ITEMS.map((item) => (
                 <div key={item.label} className="rounded-2xl bg-white/12 p-4">
-                  <p className="text-2xl font-bold tabular-nums">{item.value}</p>
-                  <p className="mt-1 text-sm leading-5 text-white/72">{item.label}</p>
+                  <p className="text-2xl font-bold tabular-nums">
+                    {language === "th" ? item.value : item.valueEn}
+                  </p>
+                  <p className="mt-1 text-sm leading-5 text-white/72">
+                    {language === "th" ? item.label : item.labelEn}
+                  </p>
                   <span className="mt-3 inline-flex rounded-full bg-white px-2 py-0.5 text-xs font-medium text-[#0b2f6b]">
                     {item.trend}
                   </span>
@@ -545,16 +759,23 @@ export function PrototypePage() {
             {ROLE_OPTIONS.map((item) => (
               <Button
                 key={item.id}
-                aria-label={`${item.label}: ${item.description}`}
+                aria-label={`${language === "th" ? item.label : item.labelEn}: ${
+                  language === "th" ? item.description : item.descriptionEn
+                }`}
                 className={role === item.id ? "bg-[#0b2f6b] text-white" : undefined}
                 size="sm"
                 variant={role === item.id ? "primary" : "secondary"}
                 onPress={() => {
                   setRole(item.id);
-                  setSecurityLogs((current) => [`สลับ role เป็น ${item.label}`, ...current].slice(0, 6));
+                  setSecurityLogs((current) =>
+                    [
+                      language === "th" ? `สลับ role เป็น ${item.label}` : `Role changed to ${item.labelEn}`,
+                      ...current,
+                    ].slice(0, 6),
+                  );
                 }}
               >
-                {item.label}
+                {language === "th" ? item.label : item.labelEn}
               </Button>
             ))}
           </div>
@@ -574,7 +795,7 @@ export function PrototypePage() {
               Gray
             </Button>
             <Button size="sm" variant="danger-soft" onPress={resetDemo}>
-              Reset
+              {copy.navReset}
             </Button>
           </div>
         </div>
@@ -584,21 +805,21 @@ export function PrototypePage() {
         <section className="grid gap-6 lg:grid-cols-[1fr_360px]">
           <div className="flex min-w-0 flex-col gap-5">
             <SectionHeading
-              description="Traditional search, tags search, prompt suggestion และ flexible search สำหรับบริการ/ข่าว/FAQ/Policy"
+              description={copy.searchBody}
               icon={Magnifier}
-              title="Smart Search & Citizen Services"
+              title={copy.searchTitle}
             />
 
             <div className="relative">
               <SearchField aria-label="ค้นหาข้อมูลบนเว็บไซต์" value={query} onChange={setQuery}>
                 <SearchField.Group className="h-14 rounded-2xl bg-surface px-2 shadow-surface">
                   <SearchField.SearchIcon className="ml-2 size-5" />
-                  <SearchField.Input placeholder="ค้นหา เช่น บัญชีม้า, ขายทอดตลาด, Privacy Policy, Dashboard API" />
+                  <SearchField.Input placeholder={copy.searchPlaceholder} />
                   <SearchField.ClearButton />
                 </SearchField.Group>
               </SearchField>
               <div className="mt-3 flex flex-wrap gap-2">
-                {["บัญชีม้า", "ขายทอดตลาด", "แจ้งเบาะแส", "รายชื่อบุคคล", "Privacy Policy"].map((item) => (
+                {copy.searchChips.map((item) => (
                   <Button key={item} size="sm" variant="secondary" onPress={() => setQuery(item)}>
                     {item}
                   </Button>
@@ -614,16 +835,25 @@ export function PrototypePage() {
                   type="button"
                   onClick={() => {
                     if (item.type === "service") selectService(item.id as ServiceId);
-                    recordVisit({group: item.group, id: item.id, tags: item.tags, title: item.title});
+                    recordVisit({
+                      group: language === "th" ? item.group : item.groupEn,
+                      id: item.id,
+                      tags: language === "th" ? item.tags : item.tagsEn,
+                      title: language === "th" ? item.title : item.titleEn,
+                    });
                   }}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <Chip size="sm" variant="soft">
-                        {item.group}
+                        {language === "th" ? item.group : item.groupEn}
                       </Chip>
-                      <p className="text-foreground mt-3 text-sm font-semibold leading-6">{item.title}</p>
-                      <p className="text-muted mt-2 line-clamp-1 text-xs">{item.tags.join(" · ")}</p>
+                      <p className="text-foreground mt-3 text-sm font-semibold leading-6">
+                        {language === "th" ? item.title : item.titleEn}
+                      </p>
+                      <p className="text-muted mt-2 line-clamp-1 text-xs">
+                        {(language === "th" ? item.tags : item.tagsEn).join(" · ")}
+                      </p>
                     </div>
                     <ArrowRight className="text-muted mt-1 size-4 shrink-0" />
                   </div>
@@ -646,15 +876,17 @@ export function PrototypePage() {
                         <Card.Title className="text-base">
                           {language === "th" ? service.title : service.titleEn}
                         </Card.Title>
-                        <Card.Description>{service.tag}</Card.Description>
+                        <Card.Description>{language === "th" ? service.tag : service.tagEn}</Card.Description>
                       </div>
                     </Card.Header>
                     <Card.Content className="px-0 py-4">
-                      <p className="text-muted text-sm leading-6">{service.description}</p>
+                      <p className="text-muted text-sm leading-6">
+                        {language === "th" ? service.description : service.descriptionEn}
+                      </p>
                     </Card.Content>
                     <Card.Footer className="p-0">
                       <Button fullWidth variant={isActive ? "primary" : "secondary"} onPress={() => selectService(service.id)}>
-                        เปิดบริการนี้
+                        {language === "th" ? "เปิดบริการนี้" : "Open service"}
                       </Button>
                     </Card.Footer>
                   </Card>
@@ -666,13 +898,13 @@ export function PrototypePage() {
           <aside className="flex flex-col gap-5">
             <div className="rounded-3xl bg-[#f8fafc] p-5 dark:bg-white/5">
               <SectionHeading
-                description="จำจากหัวข้อที่ผู้ใช้คลิกล่าสุดและ tag ที่สนใจ"
+                description={copy.personalizedBody}
                 icon={Bookmark}
                 title="Personalized"
               />
               <div className="mt-5 flex flex-col gap-3">
                 {visits.length === 0 ? (
-                  <p className="text-muted text-sm">ยังไม่มีประวัติ กดบริการหรือผลค้นหาเพื่อสร้าง Last Visited</p>
+                  <p className="text-muted text-sm">{copy.noHistory}</p>
                 ) : (
                   visits.slice(0, 4).map((visit) => (
                     <button
@@ -695,7 +927,7 @@ export function PrototypePage() {
               <div className="mt-5 flex flex-wrap gap-2">
                 {recommended.map((service) => (
                   <Chip key={service.id} variant="soft">
-                    {service.tag}
+                    {language === "th" ? service.tag : service.tagEn}
                   </Chip>
                 ))}
               </div>
@@ -703,14 +935,14 @@ export function PrototypePage() {
 
             <div className="rounded-3xl bg-[#fff7f7] p-5 dark:bg-white/5">
               <SectionHeading
-                description="Mock login / registration สำหรับ 5 กลุ่มผู้ใช้งาน"
+                description={copy.registerBody}
                 icon={PersonPlus}
                 title="Registration"
               />
               <div className="mt-5 space-y-3">
                 <input
                   className="border-border bg-surface text-foreground h-11 w-full rounded-xl border px-3 text-sm outline-none"
-                  placeholder="ชื่อผู้ใช้งาน / ThaiD mock"
+                  placeholder={copy.userPlaceholder}
                   value={draft.name}
                   onChange={(event) => setDraft({...draft, name: event.target.value})}
                 />
@@ -723,12 +955,14 @@ export function PrototypePage() {
                 <div className="flex items-center justify-between rounded-2xl bg-surface p-3 shadow-surface">
                   <span className="text-sm">Captcha mock: 7 + 2 = 9</span>
                   <Button size="sm" variant={captchaOk ? "primary" : "secondary"} onPress={() => setCaptchaOk(!captchaOk)}>
-                    {captchaOk ? "ผ่านแล้ว" : "ยืนยัน"}
+                    {captchaOk ? copy.captchaPassed : copy.captchaConfirm}
                   </Button>
                 </div>
                 <Button fullWidth isDisabled={!captchaOk} onPress={() => {
                   setSecurityLogs((current) => [`Login mock role ${role}`, ...current].slice(0, 6));
-                  toast.success("เข้าสู่ระบบจำลองแล้ว", {description: "Session timeout mock: 20 นาที"});
+                  toast.success(language === "th" ? "เข้าสู่ระบบจำลองแล้ว" : "Mock login completed", {
+                    description: language === "th" ? "Session timeout mock: 20 นาที" : "Session timeout mock: 20 minutes",
+                  });
                 }}>
                   Login with ThaiD Mock
                 </Button>
@@ -740,28 +974,32 @@ export function PrototypePage() {
         <section className="grid gap-6 lg:grid-cols-[420px_1fr]">
           <div className="rounded-3xl bg-[#f8fafc] p-5 dark:bg-white/5">
             <SectionHeading
-              description="ฟอร์มบริการจำลองพร้อม autosave draft และเลขติดตาม"
+              description={copy.formBody}
               icon={FileText}
-              title={activeService.title}
+              title={language === "th" ? activeService.title : activeService.titleEn}
             />
             <div className="mt-5 space-y-3">
               <textarea
                 className="border-border bg-surface text-foreground min-h-32 w-full resize-y rounded-2xl border p-3 text-sm leading-6 outline-none"
-                placeholder={`รายละเอียดสำหรับ${activeService.title}`}
+                placeholder={
+                  language === "th"
+                    ? `รายละเอียดสำหรับ${activeService.title}`
+                    : `Details for ${activeService.titleEn}`
+                }
                 value={draft.detail}
                 onChange={(event) => setDraft({...draft, detail: event.target.value})}
               />
               <input
                 className="border-border bg-surface text-foreground h-11 w-full rounded-xl border px-3 text-sm outline-none"
-                placeholder="ชื่อไฟล์แนบ เช่น evidence.pdf"
+                placeholder={copy.attachmentPlaceholder}
                 value={draft.attachment}
                 onChange={(event) => setDraft({...draft, attachment: event.target.value})}
               />
               <div className="grid grid-cols-2 gap-3">
                 <Button variant="secondary" onPress={() => toast("Draft saved", {description: "ข้อมูลถูกจำไว้ใน localStorage"})}>
-                  บันทึกแบบร่าง
+                  {copy.saveDraft}
                 </Button>
-                <Button onPress={submitDraft}>ส่งคำร้อง</Button>
+                <Button onPress={submitDraft}>{copy.submit}</Button>
               </div>
             </div>
             <div className="mt-5 flex flex-wrap gap-2">
@@ -775,21 +1013,31 @@ export function PrototypePage() {
 
           <div className="flex flex-col gap-5">
             <SectionHeading
-              description="ตัวอย่างข้อมูลเฉพาะระบบจาก TOR: auction, calendar, dashboard และ API integration"
+              description={copy.technicalBody}
               icon={Database}
-              title="API Dashboard Mock"
+              title={copy.technicalTitle}
             />
             <div className="grid gap-4 md:grid-cols-3">
               {AUCTION_ITEMS.map((item) => (
                 <Card key={item.asset} className="overflow-hidden p-0">
                   <div className="relative aspect-[16/9] w-full">
-                    <Image alt={item.asset} className="object-cover" fill sizes="(max-width: 768px) 100vw, 33vw" src={item.image} />
+                    <Image
+                      alt={language === "th" ? item.asset : item.assetEn}
+                      className="object-cover"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      src={item.image}
+                    />
                   </div>
                   <Card.Content className="p-4">
-                    <Chip size="sm" variant="soft">{item.status}</Chip>
-                    <h3 className="text-foreground mt-3 text-sm font-semibold">{item.asset}</h3>
-                    <p className="text-muted mt-1 text-xs">{item.date}</p>
-                    <p className="mt-3 text-lg font-bold tabular-nums">{item.price}</p>
+                    <Chip size="sm" variant="soft">{language === "th" ? item.status : item.statusEn}</Chip>
+                    <h3 className="text-foreground mt-3 text-sm font-semibold">
+                      {language === "th" ? item.asset : item.assetEn}
+                    </h3>
+                    <p className="text-muted mt-1 text-xs">{language === "th" ? item.date : item.dateEn}</p>
+                    <p className="mt-3 text-lg font-bold tabular-nums">
+                      {language === "th" ? item.price : item.priceEn}
+                    </p>
                   </Card.Content>
                 </Card>
               ))}
@@ -797,22 +1045,28 @@ export function PrototypePage() {
             <div className="grid gap-4 md:grid-cols-2">
               <div className="rounded-3xl bg-[#0b2f6b] p-5 text-white">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold">ปฏิทินกิจกรรมตามสิทธิ์</h3>
+                  <h3 className="font-semibold">{copy.calendarTitle}</h3>
                   <Calendar className="size-5" />
                 </div>
                 <div className="mt-4 space-y-3">
                   {CALENDAR_ITEMS.map((item) => (
                     <div key={item.label} className="flex items-center gap-3 rounded-2xl bg-white/10 p-3">
-                      <span className="w-16 text-sm font-bold">{item.date}</span>
-                      <span className="min-w-0 flex-1 text-sm">{item.label}</span>
-                      <span className="rounded-full bg-white px-2 py-0.5 text-xs text-[#0b2f6b]">{item.role}</span>
+                      <span className="w-16 text-sm font-bold">
+                        {language === "th" ? item.date : item.dateEn}
+                      </span>
+                      <span className="min-w-0 flex-1 text-sm">
+                        {language === "th" ? item.label : item.labelEn}
+                      </span>
+                      <span className="rounded-full bg-white px-2 py-0.5 text-xs text-[#0b2f6b]">
+                        {language === "th" ? item.role : item.roleEn}
+                      </span>
                     </div>
                   ))}
                 </div>
               </div>
               <div className="rounded-3xl bg-[#fff7f7] p-5 dark:bg-white/5">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-foreground font-semibold">Security & Transaction Log</h3>
+                  <h3 className="text-foreground font-semibold">{copy.securityTitle}</h3>
                   <ShieldCheck className="text-[#d71920] size-5" />
                 </div>
                 <div className="mt-4 space-y-2">
@@ -838,13 +1092,13 @@ export function PrototypePage() {
         <section className="grid gap-6 lg:grid-cols-[1fr_380px]">
           <div className="flex flex-col gap-5">
             <SectionHeading
-              description="CMS, preview, translation, layout, widget ordering, banner analytics และ duplicate-title notification"
+              description={copy.cmsBody}
               icon={Gear}
-              title="Officer CMS & Config"
+              title={copy.cmsTitle}
             />
             {!canUseCms ? (
               <div className="rounded-3xl border border-dashed border-[#d71920]/40 bg-[#fff7f7] p-6 text-sm text-[#991b1b] dark:bg-white/5 dark:text-white">
-                เลือก role “เจ้าหน้าที่” หรือ “ผู้บริหาร” ด้านบนเพื่อเปิด workbench ตาม TOR ข้อ CMS / Notifications / Configurations
+                {copy.cmsLocked}
               </div>
             ) : (
               <div className="grid gap-5 lg:grid-cols-2">
@@ -858,7 +1112,7 @@ export function PrototypePage() {
                     {duplicateTitle ? (
                       <div className="flex items-center gap-2 rounded-xl bg-warning/10 p-3 text-sm text-warning">
                         <CircleExclamation className="size-4" />
-                        พบหัวเรื่องซ้ำ ระบบแจ้งเตือนก่อนเผยแพร่
+                        {copy.duplicateTitle}
                       </div>
                     ) : null}
                     <div className="grid grid-cols-2 gap-3">
@@ -896,7 +1150,7 @@ export function PrototypePage() {
                     />
                     <div className="flex flex-wrap gap-2">
                       <TogglePill isActive={cms.language === "th"} label="หน้า TH" onPress={() => setCms({...cms, language: "th"})} />
-                      <TogglePill isActive={cms.language === "en"} label="หน้า EN" onPress={() => setCms({...cms, language: "en"})} />
+                      <TogglePill isActive={cms.language === "en"} label="Page EN" onPress={() => setCms({...cms, language: "en"})} />
                     </div>
                     <Button fullWidth onPress={saveCms}>Preview & Save CMS Draft</Button>
                   </div>
@@ -906,7 +1160,7 @@ export function PrototypePage() {
                   <div className="flex items-center justify-between gap-3">
                     <div>
                       <h3 className="font-semibold">Widget Order</h3>
-                      <p className="text-sm text-white/70">จำลอง Drag & Drop ด้วยปุ่มเลื่อนลำดับ</p>
+                      <p className="text-sm text-white/70">{copy.widgetHelp}</p>
                     </div>
                     <Eye className="size-5" />
                   </div>
@@ -927,7 +1181,7 @@ export function PrototypePage() {
                     ))}
                   </div>
                   <div className="mt-5 rounded-2xl bg-white p-4 text-[#0b2f6b]">
-                    <p className="text-sm font-semibold">Banner Click Analytics</p>
+                    <p className="text-sm font-semibold">{copy.bannerClickAnalytics}</p>
                     <p className="mt-2 text-3xl font-bold tabular-nums">{cms.bannerClicks}</p>
                     <ProgressBar aria-label="Banner click progress" className="mt-3" value={74} />
                     <Button className="mt-4" size="sm" variant="secondary" onPress={() => setCms({...cms, bannerClicks: cms.bannerClicks + 1})}>
@@ -942,16 +1196,12 @@ export function PrototypePage() {
 
           <div className="rounded-3xl bg-[#f8fafc] p-5 dark:bg-white/5">
             <SectionHeading
-              description="เปิด/ปิดเสียง สั่น Banner และกำหนด upload policy"
+              description={copy.notificationsBody}
               icon={Bell}
-              title="Notifications"
+              title={copy.notificationsTitle}
             />
             <div className="mt-5 space-y-3">
-              {[
-                {key: "sound" as const, label: "เสียงแจ้งเตือน", icon: Volume},
-                {key: "vibration" as const, label: "สั่นบนอุปกรณ์", icon: Bell},
-                {key: "banner" as const, label: "Banner แจ้งเตือน", icon: FileText},
-              ].map((item) => {
+              {NOTIFICATION_OPTIONS[language].map((item) => {
                 const Icon = item.icon;
 
                 return (
@@ -965,14 +1215,20 @@ export function PrototypePage() {
                       variant={notifications[item.key] ? "primary" : "secondary"}
                       onPress={() => setNotifications({...notifications, [item.key]: !notifications[item.key]})}
                     >
-                      {notifications[item.key] ? "เปิด" : "ปิด"}
+                      {notifications[item.key]
+                        ? language === "th"
+                          ? "เปิด"
+                          : "On"
+                        : language === "th"
+                          ? "ปิด"
+                          : "Off"}
                     </Button>
                   </div>
                 );
               })}
               <div className="rounded-2xl bg-surface p-4 shadow-surface">
-                <p className="text-foreground text-sm font-semibold">Upload Config</p>
-                <p className="text-muted mt-1 text-sm">สูงสุด 50 MB · MP3, MP4, PDF, WORD, EXCEL</p>
+                <p className="text-foreground text-sm font-semibold">{copy.uploadConfig}</p>
+                <p className="text-muted mt-1 text-sm">{copy.uploadPolicy}</p>
               </div>
             </div>
           </div>
@@ -996,7 +1252,7 @@ export function PrototypePage() {
               <Sheet.Handle />
               <Sheet.CloseTrigger />
               <Sheet.Header>
-                <Sheet.Heading>ผู้ช่วยอัจฉริยะ iAMLO</Sheet.Heading>
+                <Sheet.Heading>{copy.chatbotHeading}</Sheet.Heading>
               </Sheet.Header>
               <Sheet.Body>
                 <div className="flex max-h-[420px] flex-col gap-3 overflow-y-auto pr-1">
@@ -1014,7 +1270,7 @@ export function PrototypePage() {
                   ))}
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {["ยื่นเรื่องร้องเรียน", "คุ้มครองสิทธิ", "ขายทอดตลาด"].map((prompt) => (
+                  {copy.chatPrompts.map((prompt) => (
                     <Button key={prompt} size="sm" variant="secondary" onPress={() => sendChat(prompt)}>
                       {prompt}
                     </Button>
@@ -1023,20 +1279,20 @@ export function PrototypePage() {
                 <div className="mt-4 flex gap-2">
                   <input
                     className="border-border bg-surface text-foreground h-11 min-w-0 flex-1 rounded-xl border px-3 text-sm outline-none"
-                    placeholder="พิมพ์คำถาม..."
+                    placeholder={copy.chatbotPlaceholder}
                     value={chatInput}
                     onChange={(event) => setChatInput(event.target.value)}
                     onKeyDown={(event) => {
                       if (event.key === "Enter") sendChat(chatInput);
                     }}
                   />
-                  <Button onPress={() => sendChat(chatInput)}>ส่ง</Button>
+                  <Button onPress={() => sendChat(chatInput)}>{copy.send}</Button>
                 </div>
               </Sheet.Body>
               <Sheet.Footer>
-                <Button variant="secondary" onPress={() => setChat(DEFAULT_CHAT)}>
+                <Button variant="secondary" onPress={() => setChat(language === "th" ? DEFAULT_CHAT : DEFAULT_CHAT_EN)}>
                   <Xmark className="size-4" />
-                  ล้างแชท
+                  {copy.clearChat}
                 </Button>
               </Sheet.Footer>
             </Sheet.Dialog>
